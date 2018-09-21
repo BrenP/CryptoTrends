@@ -8,10 +8,15 @@
 to run: simply double click the crypto.html which is the main page
 
 crypto.html = main page
+
 bitcoin.html = bitcoin page
+
 litecoin.html = litecoin page
+
 ethereum.html = ethereum page
+
 disc.html = disclosure and pp page
+
 crypto.css = styling css doc
 
 
