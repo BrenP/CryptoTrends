@@ -7,7 +7,7 @@
 
 to run: simply double click the crypto.html which is the main page
 
-crypto.html = main page
+index.html = main page
 
 bitcoin.html = bitcoin page
 
