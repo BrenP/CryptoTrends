@@ -1,4 +1,4 @@
-const googleTrends = require('google-trends-api');
+const trends = require('./trendApi.js');
 module.exports = {
 	main: function (weeks, print, terms){
 		//var terms = ['Bitcoin', 'Ethereum', 'Litecoin'];
@@ -34,7 +34,7 @@ module.exports = {
 			hours = days * 24;
 			millisecs = 60*60*1000;
 		}
-
+		
 		searchTime = hours * millisecs;
 		startDate = new Date(Date.now() - searchTime);
 		endDate = new Date(Date.now());
@@ -48,49 +48,61 @@ module.exports = {
 			return devMap
 		}).catch(console.error))
 		
+		
+		// This function is used to get all the data from all the search terms
 		function getData(){
+			var confirmEntries;
 			console.log("trendsModule Running...\n\n");
 			promises = terms.map(function(term){
 				return new Promise((resolve, reject) => {
 					if (weeks <= 1){
-						googleTrends.interestOverTime({keyword: term, startTime: startDate, endTime: endDate, geo: region, granularTimeResolution: true}, 
-						function(err, results) {
-							if (err){ 
-								return reject();
-							}
-							else {
-								termMap.set(term, JSON.parse(results));
-								resolve();
-							}
-						});
+						var result = getTrendsData(term).then((result) => {
+							termMap.set(term, result);
+							resolve();
+						})
 					}
 					else{
-						googleTrends.interestOverTime({keyword: term, startTime: startDate, endTime: endDate, geo: region}, 
-						function(err, results) {
-							if (err){ 
-								return reject();
-							}
-							else {
-								termMap.set(term, JSON.parse(results));
+						var json = getTrendsData(term).then((result) => {
+							if ((weeks*7) == (result.default.timelineData.length)){
+								termMap.set(term, result);
 								resolve();
 							}
-						});
+						})
 					}
 				});
 			});
 			// returns a promise after all Json has been returned by google trends
 			return(Promise.all(promises)
 			.then(function(){
-				getMap()
+					// calls getDevMap() after the promises for all trends have been returned
+					setDevMap()
 			}).catch(console.error))
 		}
-
-		/* 	This function calls the getTermArray function in order to get an array 
-		/	containing all the data for each search term 
+		
+		/*
+			This function is used to get the data for each term from the google-trends-api
 		*/
-		function getMap(){
+		async function getTrendsData(term){
+			var json = await trends.getTrends(startDate, endDate, region, term);
+			if (weeks > 1){
+				if (json.default.timelineData.length != (weeks * 7)){
+					hours = ((weeks*7)+2) * 24;
+					searchTime = hours * millisecs;
+					startDate = new Date(Date.now() - searchTime);
+					json = await trends.getTrends(startDate, endDate, region, term);
+				}
+			}
+			return json;
+		}
+
+		/* 	This function calls getArray() in order to get an array 
+			containing all the data for each search term 
+			It then stores all data into a hashmap using each search terms as keys
+			Finally, it calls printResults() if 'print' variable was turned on by the user
+		*/
+		function setDevMap(){
 			for (var i = 0; i < terms.length; i++) {
-				devMap.set(terms[i], getArray(i));
+				devMap.set(terms[i], getTermArray(i));
 			}
 			if (print){
 				printResults();
@@ -98,42 +110,68 @@ module.exports = {
 		}
 
 
-		/* 	This function call the getWeekArray function in order to get an array 
-		/	containing all the data for each each weekof the search
+		/* 	This function calls getEntryArray() in order to get an array 
+			containing the data for each entry of the term requested by setDevMap()
+			It then calls getFullEntryArray() in order to get an array containing the full data
+			for each entry
+			Finally, it stores the data into another array containing the full data for a search term
 		*/
-		function getArray(num){
-			var array = [];
+		function getTermArray(num){
 			var termArray = [];
 			for (var i = 0; i < entries; i++) {
-				termArray[i] = getWeekArray(termMap.get(terms[num]), i);
+				termArray[i] = getPartialEntryArray(termMap.get(terms[num]), i);
 			}
-			termArray = getTermArray(termArray);
+			termArray = getFullEntryArray(termArray);
 			return termArray;
 		}
 
-
-		function getTermArray(array){
-			var res;
+		
+		/*	This function uses the previous partial entry array to create the full entry array
+			containing all the data for each entry.
+			The array index for the data is as follows:
+				[0] a string containing the start date and end date for the entry
+				[1] a hashmap containing all the values for that entry. Dates are used as keys
+				[2] the avarage of both standard deviations
+				[3] the deviation change between this entry and the previous entry
+				[4] an integer showing the sample standard deviation
+				[5] an integer showing the population standard deviation	
+			
+		*/
+		function getFullEntryArray(array){
+			var res, temp;
+			
 			for (var i = 0; i < entries; i++){
+				temp = array[i][3];
+				array[i][5] = temp;
+				temp = array[i][2];
+				array[i][2] = array[i][4];
+				array[i][4] = temp;
 				if (i == 0){
-					array[i][5] = 0;
+					array[i][3] = 0;
 				}
 				else{
-					res = (array[i][4])-(array[i-1][4]);
-					array[i][5] = res;
+					res = (array[i][2])-(array[i-1][2]);
+					array[i][3] = res;
 				}
 			}
 			return array;
 		}
 
 
-		/* This function gets the sample and population standard deviation per week using the following calculations:
-		/	1. Work out the Mean (sum of values / amount of values)
-		/	2. Then for each number: subtract the Mean and square the result
-		/	3. Then work out the mean of those squared differences. [for sample deviation use (sum of values / amount of values - 1)]
-		/	4. Take the square root of that and we are done!
+		/*	This function creates an array containing the data for each entry.
+			The array index for the data is as follows:
+				[0] a string containing the start date and end date for the entry
+				[1] a hashmap containing all the values for that entry. Dates are used as keys
+				[2] an integer showing the sample standard deviation
+				[3] an integer showing the population standard deviation
+				[4] the avarage of both standard deviations
+			It then gets the sample and population standard deviation per week using the following calculations:
+				1. Work out the Mean (sum of values / amount of values)
+				2. Then for each number: subtract the Mean and square the result
+				3. Then work out the mean of those squared differences. [for sample deviation use (sum of values / amount of values - 1)]
+				4. Take the square root of that and we are done!
 		*/
-		function getWeekArray(parsedResult, num){
+		function getPartialEntryArray(parsedResult, num){
 			var mean, avg, sampleDev, popDev;
 			var sum = 0;
 			var newSet = [];
@@ -196,8 +234,8 @@ module.exports = {
 			
 			entryArray[0] = string;
 			entryArray[1] = valueMap;
-			entryArray[2] = sampleDev;
-			entryArray[3] = popDev;
+			entryArray[2] = popDev;
+			entryArray[3] = sampleDev;
 			entryArray[4] = avg;
 			
 			return entryArray;
@@ -205,11 +243,11 @@ module.exports = {
 
 		
 		/* This function prints the results in a weekly basis in the following format:
-		/		Search Term							e.g			Bitcoin
-		/		start of week - end of week						Sep 17 - Sep 23
-		/		values of each week day							87, 89, 87, 81, 100, 84, 74
-		/		average of both deviations						7.663054116836143
-		/		deviation change from previous week				+1.365675756434341
+		//		Search Term							e.g			Bitcoin
+		//		start of week - end of week						Sep 17 - Sep 23
+		//		values of each week day							87, 89, 87, 81, 100, 84, 74
+		//		average of both deviations						7.663054116836143
+		//		deviation change from previous week				+1.365675756434341
 		*/
 		function printResults(){
 			var bitArray;
@@ -230,10 +268,10 @@ module.exports = {
 							console.log(string);
 							string = '';
 						}
-						else if(k == 4){
+						else if(k == 2){
 							console.log("Standard Deviation: " + devMap.get(terms[i])[j][k]);
 						}
-						else if(k == 5){
+						else if(k == 3){
 							console.log("Deviation Change: " + devMap.get(terms[i])[j][k]);
 						}
 					}
