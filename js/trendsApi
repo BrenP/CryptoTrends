@@ -1,0 +1,26 @@
+const googleTrends = require('google-trends-api');
+module.exports = {
+	getTrends: function (startDate, endDate, region, term){
+		var parsedResult;
+		function getData(){
+			return new Promise((resolve, reject) => {
+				googleTrends.interestOverTime({keyword: term, startTime: startDate, endTime: endDate, geo: region, granularTimeResolution: true}, 
+					function(err, results) {
+						if (err){ 
+							return reject();
+						}
+						else {
+							parsedResult = JSON.parse(results);
+							resolve();
+						}
+					}
+				);
+			});
+		}
+		var res = getData();
+		return(res.then(function(){
+			//returns the map with all the information
+			return parsedResult
+		}).catch(console.error))
+	}
+}
