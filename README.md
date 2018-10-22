@@ -33,5 +33,5 @@ Optional: app.js can accept user input. To do this simply run app using: node ap
 
 example: Node app.js 4 1 0 Bitcoin Ethereum Litecoin
 
-note: number of weeks must be less than 39. If weeks is more than 1 it will retrieve the daily data. If week is set to 1 it will display retrieve the hourly data. If week is set to 0 or less it will display the data by the minute. 
+note: number of weeks must be less than 39. If weeks is more than 1 it will retrieve the daily data. If week is set to 1 it will retrieve the hourly data. If week is set to 0 or less it will retrieve the data by the minute. 
 It can retrive as many terms as inputted by the user. However, if compare is set to 1 it will compare the first two terms only.
