@@ -19,7 +19,7 @@ body {
   float: left;
 }
 
-.text-1 {
+.home-text {
   z-index: 1;
   width: 5.2%;
   min-height: 40px;
@@ -30,7 +30,7 @@ body {
   color: rgb(255, 255, 255);
 }
 
-.text-2 {
+.trends-text {
   z-index: 2;
   width: 5.2%;
   min-height: 40px;
@@ -41,7 +41,7 @@ body {
   color: rgb(255, 255, 255);
 }
 
-.text-3 {
+.about-text {
   z-index: 3;
   width: 5.9499999999%;
   min-height: 40px;
@@ -63,7 +63,7 @@ body {
   color: rgb(255, 255, 255);
 }
 
-.text-5 {
+.crypt-text {
   clear: both;
   z-index: 5;
   width: 19.15%;
@@ -74,9 +74,20 @@ body {
   color: rgb(0, 0, 0);
 }
 
-.chart {
-	position: absolute;
-	top: 80px;
-	right: 0;
-	height: 100px;
+.bitcoin-element {
+  z-index: 6;
+  width: 48.5%;
+  height: 495px;
+  margin: -500px 0 0 22%;
+  background-color: rgb(248, 77, 77);
+}
+a {
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+}
+
+a:hover {
+    background-color: rgb(248, 77, 77); /* Green */
+    color: white;
+	border: 1px solid white;
 }

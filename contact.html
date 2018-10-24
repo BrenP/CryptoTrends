@@ -3,16 +3,28 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1.0">
-  <title>conac</title>
+  <title>contact</title>
   <link rel="stylesheet" href="css/standardize.css">
   <link rel="stylesheet" href="css/contact-grid.css">
   <link rel="stylesheet" href="css/contact.css">
 </head>
 <body class="body page-conac clearfix">
-  <p class="text text-1">Home</p>
-  <p class="text text-2">Trends</p>
-  <p class="text text-3">About us</p>
-  <p class="text text-4">Anything</p>
-  <div class="element"></div>
+  <a class="text home-text" href ="index.html">Home</a>
+  <a class="text trends-text" href="trends.html">Trends</a>
+  <a class="text about-text" href="contact.html">Contact us</a>
+  <a class="text text-4" href="about.html">About Us</a>
+  <div class="element">
+	<div class="contact">
+		<form id ="mail" action="action_page.php">
+			<p h1>Email Us</p>Email:
+			<input name="email" type="text">
+			<br>
+			<textarea name="msg" rows="7" cols="40"></textarea>
+			<br><br>
+			<input type="button" onclick="contact()" value="submit">
+		</form>
+	</div>
+  </div>
+  <p class="text crypt-text">Contact</p>
 </body>
 </html>

@@ -24,19 +24,19 @@ body {
   color: rgb(255, 255, 255);
 }
 
-.text-1 {
+.home-text {
   z-index: 1;
   width: 5.2%;
   margin-left: 64.4%;
 }
 
-.text-2 {
+.trends-text {
   z-index: 2;
   width: 5.2%;
   margin-left: 1.6%;
 }
 
-.text-3 {
+.about-text {
   z-index: 3;
   width: 5.9499999999%;
   margin-left: 1.25%;
@@ -46,4 +46,79 @@ body {
   z-index: 4;
   width: 5.2%;
   margin-left: 1.2%;
+}
+
+a {
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+}
+
+a:hover {
+    background-color: rgb(248, 77, 77); /* Green */
+    color: white;
+	border: 1px solid white;
+}
+
+/** Forms **/
+.search {
+	background-color: gray;
+	float: top-left;
+	margin: 5px;
+	border: 5px solid black;
+	width: 40%;
+	height: 50%;
+	color: black;
+	text-align: center;
+	padding: 10 red;
+}
+
+p.h1 {
+	background-color: lightgray;
+	height: 10%;
+	font-size: 20px;
+	text-align: caption;
+	width: 100%;
+	float: left;
+	border: 2px solid rgb(248, 77, 77);
+}
+select {
+    width: 60%;
+	
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+input[type=datetime-local] {
+    width: 60%;
+	clear: right;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+input[type=text] {
+    width: 60%;
+	clear: right;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+input[type=text]:focus {
+    background-color: rgb(248, 77, 77);
+}
+input[type=button], input[type=submit], input[type=reset]{
+    background-color: rgb(248, 77, 77);
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+	width: 80%;
+}
+.chart {
+	z-index: 6;
+	width: 48.5%;
+	height: 495px;
+	margin: -472px 0 0 80%;
+	background-color: rgb(248, 77, 77);
 }
