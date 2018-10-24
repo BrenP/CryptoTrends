@@ -14,4 +14,6 @@ st.get('streams/symbol/btc.x', function (err, res) {
 			console.log("Sentiment: \t" + json.body.messages[i].entities.sentiment.basic + "\n");
 		}
 	}
+	console.log("\nCall Limit: " + res.limit);
+	console.log("Remaining: " + res.remaining);
 });
