@@ -1,5 +1,6 @@
 <!doctype html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1.0">
@@ -7,12 +8,39 @@
   <link rel="stylesheet" href="css/standardize.css">
   <link rel="stylesheet" href="css/trends-grid.css">
   <link rel="stylesheet" href="css/trends.css">
+  <script src="scripts.js"></script>
 </head>
 <body class="body page-trends clearfix">
-  <p class="text text-1">Home</p>
-  <p class="text text-2">Trends</p>
-  <p class="text text-3">About us</p>
-  <p class="text text-4">Anything</p>
-  <div class="element"></div>
+ <a class="text home-text" href ="index.html">Home</a>
+  <a class="text trends-text" href="trends.html">Trends</a>
+  <a class="text about-text" href="contact.html">Contact us</a>
+  <a class="text text-4" href="about.html">About Us</a>
+	<div class="element">
+		<div class="search">
+			<p class="h1" h1>Trends</p>
+			<form id="chart" action="action_page.php">
+				<p>Search Keyword:</p>
+				<input name="kword" type="text">
+				<br>
+				<p>From (date and time):</p>
+				<input type="datetime-local" name="fromtime">
+				<p>To (date and time):</p>
+				<input type="datetime-local" name="totime">
+				<p>Rate:</p>
+				<select name="Rate">
+					<option value="hr">Hour</option>
+					<option value="day">Day</option>
+					<option value="week">Week</option>
+					<option value="mon">Month</option>
+					<option value="yr">Year</option>
+				</select>
+					<br><br>
+				<input type="button" onclick="graph()" value="submit">
+			</form>
+		</div>
+		<div class="chart">
+			<canvas id="myChart" width="400" height="400"></canvas>
+		</div>
+	</div>
 </body>
 </html>
