@@ -11,6 +11,9 @@ module.exports = {
 						}
 						else {
 							parsedResult = JSON.parse(results);
+							if (parsedResult.default.timelineData.length == 0){
+								return reject();
+							}
 							resolve();
 						}
 					}
@@ -21,6 +24,8 @@ module.exports = {
 		return(res.then(function(){
 			//returns the map with all the information
 			return parsedResult
-		}).catch(console.error))
+		}).catch(() => {
+			console.log("Not enough data for search term");
+		}))
 	}
 }
