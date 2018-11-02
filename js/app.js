@@ -47,7 +47,6 @@ function assignTrendValues(){
 
 async function getTrends(){
 	mainMap = await trends.getMap(weeks, compare, terms);
-	//const mymap = await trends.getMap(weeks, print, terms);
 	return mainMap;
 }
 assignTrendValues();
@@ -65,7 +64,7 @@ getTrends().then((map) => {
 	  }
   }
 }).then(() => {
-	// runs after we obtain the correct map
+	// do after we have the right map
 }).catch(() => {
 	//console.log()
 })
