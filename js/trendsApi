@@ -1,3 +1,4 @@
+// trendsApi.js
 const googleTrends = require('google-trends-api');
 module.exports = {
 	getTrends: function (startDate, endDate, region, term){
