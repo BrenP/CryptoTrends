@@ -59,10 +59,12 @@ module.exports = {
 			//returns the map with all the information
 			return devMap;
 		}).catch(function(){
+			console.log('failed')
 			return new Promise((resolve, reject) => {
 					return reject()
 				})
-			}))
+			})
+		);
 	},//end of getMap()
 	
 	//	This function gets a new map with the requested hourly rate
@@ -192,6 +194,7 @@ function getData(terms, weeks, compare){
 					}
 					else{
 						termMap.set(term, result);
+						//console.log("resolving...");
 						resolve();
 					}
 				})
@@ -201,8 +204,10 @@ function getData(terms, weeks, compare){
 					if (result == 0){
 						return reject()
 					}
-					else if ((weeks*7) == (result.default.timelineData.length)){
+					else{
+					//else if ((weeks*7) == (result.default.timelineData.length)){
 						termMap.set(term, result);
+						//console.log("resolving...");
 						resolve();
 					}
 				})
@@ -213,6 +218,7 @@ function getData(terms, weeks, compare){
 	return(Promise.all(promises)
 	.then(function(){
 			// calls getDevMap() after the promises for all trends have been returned
+			//console.log("entering setDevMap...");
 			setDevMap(terms, weeks)
 	}).catch(function(){
 		console.log("trendsModule failed...")
@@ -249,7 +255,8 @@ function getComparedData(terms, weeks, compare){
 					if (result == 0){
 						return reject()
 					}
-					else if ((weeks*7) == (result.default.timelineData.length)){
+					else{
+					//else if ((weeks*7) == (result.default.timelineData.length)){
 						var string = [];
 						string[0] = '';
 						for (var i = 0; i < terms.length; i++){
@@ -280,6 +287,7 @@ function getComparedData(terms, weeks, compare){
 
 // This function is used to get the data for each term from the google-trends-api
 async function getTrendsData(term, weeks, compare){
+	//console.log("entering getTrendsData...");
 	var json = await trends.getTrends(startDate, endDate, region, term);
 	if (weeks > 1){
 		if (json.default.timelineData.length != (weeks * 7)){
@@ -288,11 +296,29 @@ async function getTrendsData(term, weeks, compare){
 			startDate = new Date(Date.now() - searchTime);
 			json = await trends.getTrends(startDate, endDate, region, term);
 		}
+		if (json.default.timelineData.length != (weeks * 7)){
+			hours = ((weeks*7)+3) * 24;
+			searchTime = hours * millisecs;
+			startDate = new Date(Date.now() - searchTime);
+			json = await trends.getTrends(startDate, endDate, region, term);
+		}
+		if (json.default.timelineData.length != (weeks * 7)){
+			hours = ((weeks*7)+4) * 24;
+			searchTime = hours * millisecs;
+			startDate = new Date(Date.now() - searchTime);
+			json = await trends.getTrends(startDate, endDate, region, term);
+		}
+		if (json.default.timelineData.length != (weeks * 7)){
+			hours = ((weeks*7)+5) * 24;
+			searchTime = hours * millisecs;
+			startDate = new Date(Date.now() - searchTime);
+			json = await trends.getTrends(startDate, endDate, region, term);
+		}
 	}
-	
 	if (json.default.timelineData.length == 0){
 		return json.default.timelineData.length;
 	}
+	//console.log(json);
 	return json;
 }
 
