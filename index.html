@@ -10,29 +10,38 @@
   <link rel="stylesheet" href="css/index.css">
 </head>
 
+
+
 <body class="body page-index clearfix">
-  <a class="text home-text" href ="index.html">Home</a>
-  <a class="text trends-text" href="trends.html">Trends</a>
-  <a class="text about-text" href="contact.html">Contact us</a>
-  <a class="text text-4" href="about.html">About Us</a>
+  <p class="text home-text"> <a href = "index.html"> Home </a> </p>
+  <p class="text trends-text"> <a href = "trends.html"> Trends </a> </p>
+  <p class="text about-text"> <a href = "contact.html"> About us </a> </p>
+  
   <div class="element"></div>
   <div class="element bitcoin-element">
-    <div class="btcwdgt-chart" bw-cash="true"></div>
+
+    <script src="https://widgets.coingecko.com/coingecko-coin-compare-chart-widget.js"></script>
+<coingecko-coin-compare-chart-widget type="price" currency="usd" coin-ids="bitcoin,ethereum,litecoin" locale="en" width="0"></coingecko-coin-compare-chart-widget>
+
+
+
   </div>
+
+<div class="element headline"> 
+<script src="https://widgets.coingecko.com/coingecko-coin-price-marquee-widget.js"></script>
+<coingecko-coin-price-marquee-widget currency="usd" coin-ids="bitcoin,ethereum,eos,ripple,litecoin" locale="en"></coingecko-coin-price-marquee-widget>
+
+</div>
+
+
   
   <p class="text crypt-text">CryptoTrends</p>
 
 
+  
 
-<script>
-  (function(b,i,t,C,O,I,N) {
-    window.addEventListener('load',function() {
-      if(b.getElementById(C))return;
-      I=b.createElement(i),N=b.getElementsByTagName(i)[0];
-      I.src=t;I.id=C;N.parentNode.insertBefore(I, N);
-    },false)
-  })(document,'script','https://widgets.bitcoin.com/widget.js','btcwdgt');
-</script>
+
+
 
 
 </body>
